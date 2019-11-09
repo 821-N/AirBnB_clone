@@ -8,18 +8,32 @@ from uuid import uuid4
 from datetime import datetime
 
 
+def read_datetime(iso):
+    """ 2019-11-09T15:10:22.860383 """
+    return datetime(
+        int(iso[:4]), int(iso[5:7]), int(iso[8:10]),
+        int(iso[11:13]), int(iso[14:16]), int(iso[17:19]),
+        int(float(iso[19:]) * 1000000)
+    )
+
+
 class BaseModel:
     """ BaseModel """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """ init """
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at
+        if kwargs:
+            self.id = kwargs["id"]
+            self.created_at = read_datetime(kwargs["created_at"])
+            self.updated_at = read_datetime(kwargs["updated_at"])
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = self.created_at
 
     def __str__(self):
         """ str """
-        return "[BaseModel] (%d) %s" % (self.id, self.__dict__)
+        return "[BaseModel] (%s) %s" % (self.id, self.__dict__)
 
     def save(self):
         """ save """
@@ -27,7 +41,7 @@ class BaseModel:
 
     def to_dict(self):
         """ to_dict """
-        d = self.__dict__
+        d = self.__dict__.copy()
         d["__class__"] = "BaseModel"
         d["created_at"] = self.created_at.isoformat()
         d["updated_at"] = self.updated_at.isoformat()
