@@ -6,6 +6,7 @@
 
 from uuid import uuid4
 from datetime import datetime
+from models.engine.file_storage import FileStorage
 
 
 def read_datetime(iso):
@@ -30,6 +31,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
+            FileStorage.new(None, self)
 
     def __str__(self):
         """ str """
@@ -38,6 +40,7 @@ class BaseModel:
     def save(self):
         """ save """
         self.updated_at = datetime.now()
+        FileStorage.save(None)
 
     def to_dict(self):
         """ to_dict """
