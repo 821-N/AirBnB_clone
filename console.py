@@ -39,24 +39,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_show(self, arg):
-        """ do_show -
-
-            Prints the string representation of an
-            instance base on the class name and id
-        """
-        parg = self.parse_arg(arg)
-
-        if len(arg) is 0:
-            print("**class name missing**")
-            return
-        elif len(arg) is 1:
-            print("** instance id missing **")
-
-        all_files = FileStorage.all()
-
-        print(all_files['id'])
-
 
     def do_quit(self, arg):
         """ do_quit -
@@ -140,8 +122,7 @@ class HBNBCommand(cmd.Cmd):
             Prints out basic usage of the
             Quit command
         """
-        print("\nQuit command to exit the program")
-        print("Usage: (hbnb) quit\n")
+        print("Quit command to exit the program\n")
 
     def help_EOF(self):
         """ help_EOF -
