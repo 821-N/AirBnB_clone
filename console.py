@@ -13,12 +13,6 @@ class HBNBCommand(cmd.Cmd):
         core functionality
     """
 
-    intro_prompt = '(hbnb) help\n' \
-        '\n' \
-        'Documented commands (type help <topic>):\n' \
-        '========================================\n' \
-        'EOF  help  quit\n'
-
     prompt = '(hbnb) '
 
     file = None
@@ -51,9 +45,17 @@ class HBNBCommand(cmd.Cmd):
             Prints the string representation of an
             instance base on the class name and id
         """
+        parg = self.parse_arg(arg)
+
         if len(arg) is 0:
             print("**class name missing**")
             return
+        elif len(arg) is 1:
+            print("** instance id missing **")
+
+        all_files = FileStorage.all()
+
+        print(all_files['id'])
 
 
     def do_quit(self, arg):
@@ -152,6 +154,47 @@ class HBNBCommand(cmd.Cmd):
 
     # ----- Overrides n various other useful stuff ----
 
+    def parse_arg(self, arg):
+        """ parse_arg -
+
+            This is used to seperate arguments
+            into seperate sections of an array.
+            Arguments are seperated by spaces
+            and string arguments by double quotes
+        """
+        parsed_arg = []
+        head = 0
+        tail = 0
+        parse = 0
+
+        while parse < len(arg):
+
+            if arg[parse:parse + 2] == "\"\"":
+                head = parse + 2
+                for iter in range(head + 1, len(arg)):
+                    if arg[iter:iter + 2] == "\"\"":
+                        tail = iter
+
+                        parsed_arg.append(arg[head:tail])
+                        break
+
+                    parse = tail
+
+            if arg[parse] == " " or parse == 0 and arg[1] != "\"":
+                head = parse
+                for iter in range(head + 1, len(arg)):
+                    if arg[iter] == " " or iter == len(arg) - 1:
+                        tail = iter
+
+                        clnd_arg = arg[head:tail + 1].strip()
+                        parsed_arg.append(clnd_arg)
+                        break
+
+                    parse = tail
+
+            parse += 1
+        return parsed_arg
+
     def emptyline(self):
         """ emptyline -
 
@@ -165,4 +208,4 @@ class HBNBCommand(cmd.Cmd):
         return ""
 
 if __name__ == '__main__':
-    HBNBCommand().cmdloop(HBNBCommand().intro_prompt)
+    HBNBCommand().cmdloop()
