@@ -23,6 +23,14 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """ init """
+        for name in self.template:
+            if name in kwargs:
+                value = kwargs[name]
+            else:
+                value = self.template[name]
+            if type(value) in (list, dict):
+                value = value.copy()
+            setattr(self, name, value)
         if kwargs:
             self.id = kwargs["id"]
             self.created_at = read_datetime(kwargs["created_at"])
@@ -35,7 +43,8 @@ class BaseModel:
 
     def __str__(self):
         """ str """
-        return "[BaseModel] (%s) %s" % (self.id, self.__dict__)
+        return "[%s] (%s) %s" % (self.__class__.__name__, self.id, self.
+                                 __dict__)
 
     def save(self):
         """ save """
@@ -43,9 +52,11 @@ class BaseModel:
         FileStorage.save(None)
 
     def to_dict(self):
-        """ to_dict """
+        """ cereal """
         d = self.__dict__.copy()
-        d["__class__"] = "BaseModel"
+        d["__class__"] = self.__class__.__name__
         d["created_at"] = self.created_at.isoformat()
         d["updated_at"] = self.updated_at.isoformat()
+        for name in self.template:
+            d[name] = getattr(self, name)
         return d
