@@ -23,10 +23,19 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """ init """
-        if kwargs:
-            self.id = kwargs["id"]
-            self.created_at = read_datetime(kwargs["created_at"])
-            self.updated_at = read_datetime(kwargs["updated_at"])
+        self.init(kwargs, self.template)
+
+    def init(self, attrs, template):
+        """ init but cooler """
+        for name in template:
+            if name in attrs:
+                setattr(self, name, attrs[name])
+            else:
+                setattr(self, name, template[name])
+        if attrs:
+            self.id = attrs["id"]
+            self.created_at = read_datetime(attrs["created_at"])
+            self.updated_at = read_datetime(attrs["updated_at"])
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
@@ -44,9 +53,11 @@ class BaseModel:
         FileStorage.save(None)
 
     def to_dict(self):
-        """ to_dict """
+        """ cereal """
         d = self.__dict__.copy()
         d["__class__"] = self.__class__.__name__
         d["created_at"] = self.created_at.isoformat()
         d["updated_at"] = self.updated_at.isoformat()
+        for name in self.template:
+            d[name] = getattr(self, name)
         return d
