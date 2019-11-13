@@ -23,19 +23,18 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """ init """
-        self.init(kwargs, self.template)
-
-    def init(self, attrs, template):
-        """ init but cooler """
-        for name in template:
-            if name in attrs:
-                setattr(self, name, attrs[name])
+        for name in self.template:
+            if name in kwargs:
+                value = kwargs[name]
             else:
-                setattr(self, name, template[name])
-        if attrs:
-            self.id = attrs["id"]
-            self.created_at = read_datetime(attrs["created_at"])
-            self.updated_at = read_datetime(attrs["updated_at"])
+                value = self.template[name]
+            if type(value) in (list, dict):
+                value = value.copy()
+            setattr(self, name, value)
+        if kwargs:
+            self.id = kwargs["id"]
+            self.created_at = read_datetime(kwargs["created_at"])
+            self.updated_at = read_datetime(kwargs["updated_at"])
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
