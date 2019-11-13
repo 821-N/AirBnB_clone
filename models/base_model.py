@@ -35,7 +35,8 @@ class BaseModel:
 
     def __str__(self):
         """ str """
-        return "[BaseModel] (%s) %s" % (self.id, self.__dict__)
+        return "[%s] (%s) %s" % (self.__class__.__name__, self.id, self.
+                                 __dict__)
 
     def save(self):
         """ save """
@@ -45,7 +46,7 @@ class BaseModel:
     def to_dict(self):
         """ to_dict """
         d = self.__dict__.copy()
-        d["__class__"] = "BaseModel"
+        d["__class__"] = self.__class__.__name__
         d["created_at"] = self.created_at.isoformat()
         d["updated_at"] = self.updated_at.isoformat()
         return d

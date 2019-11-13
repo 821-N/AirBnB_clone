@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 
 
+""" init heck """
+
+
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 

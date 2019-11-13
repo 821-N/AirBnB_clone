@@ -33,8 +33,10 @@ class FileStorage:
     def reload(self):
         """ Load data from json file into __objects """
         from models.base_model import BaseModel
+        from models.user import User
         models = {
-            "BaseModel": BaseModel
+            "BaseModel": BaseModel,
+            "User": User
         }
 
         try:
@@ -52,6 +54,9 @@ class FileStorage:
                             classname +
                             "'"
                         )
-                    FileStorage.__objects[name] = models[classname](objs[name])
+                    FileStorage.__objects[name] = models[classname](
+                        **
+                        objs[name]
+                    )
         except FileNotFoundError:
             pass
