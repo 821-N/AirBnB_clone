@@ -6,23 +6,7 @@ from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """
-        what's amenity?
-
-
-
-
-
-
-
-
-
-        AMENIDEEZ NUTS
-
-
-
-
-    """
+    """ amenity """
 
     template = {
         "name": ""
