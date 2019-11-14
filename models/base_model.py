@@ -22,7 +22,7 @@ class BaseModel:
     """ BaseModel """
 
     template = {}
-    
+
     def __init__(self, *args, **kwargs):
         """ init """
         for name in self.template:
