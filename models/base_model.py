@@ -21,6 +21,8 @@ def read_datetime(iso):
 class BaseModel:
     """ BaseModel """
 
+    template = {}
+    
     def __init__(self, *args, **kwargs):
         """ init """
         for name in self.template:
