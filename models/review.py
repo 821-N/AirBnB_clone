@@ -11,6 +11,10 @@ class Review(BaseModel):
         no the only reason I misspelled it is because my HANDS ARE COLD >:(
     """
 
+    place_id = ""
+    user_id = ""
+    text = ""
+
     template = {
         "place_id": "",
         "user_id": "",
